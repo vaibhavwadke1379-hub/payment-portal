@@ -1,0 +1,98 @@
+/* Base */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; font-family: Arial, sans-serif; }
+
+/* Background image and dark overlay */
+body {
+  background: url("/images/background.jpg") center/cover no-repeat fixed;
+  position: relative;
+}
+
+/* overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45); /* adjust darkness here */
+  z-index: 0;
+}
+
+/* Header (logo) */
+.site-header {
+  z-index: 2;
+  position: relative;
+  text-align: center;
+  padding: 24px 12px 0 12px;
+}
+
+.logo {
+  width: 420px;       /* large size */
+  max-width: 85%;     /* responsive */
+  height: auto;
+  display: inline-block;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+}
+
+/* Centering main content */
+.main {
+  z-index: 2;
+  position: relative;
+  min-height: calc(100vh - 140px); /* leave room for header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+/* Form box */
+.form-box {
+  width: 440px;
+  max-width: 96%;
+  background: rgba(255,255,255,0.97);
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  text-align: left;
+}
+
+.form-box h1 {
+  margin: 0 0 14px 0;
+  font-size: 20px;
+  color: #222;
+  text-align: center;
+}
+
+/* Labels & inputs */
+label { display:block; margin-top: 12px; font-weight: 600; color:#333; }
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #cfcfcf;
+  font-size: 14px;
+}
+
+/* Submit */
+.submit-btn {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px;
+  background: #f58220;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.submit-btn:hover { background: #e46c0a; }
+
+/* Error */
+.error { color: #b00020; margin-top: 10px; font-size: 14px; }
+
+/* Responsive tweaks */
+@media (max-width: 520px) {
+  .logo { width: 260px; }
+  .form-box { padding: 18px; }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Payment Portal</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Centered Nirma logo -->
+  <header class="site-header">
+    <img src="/images/nirma.png" alt="Nirma University" class="logo">
+  </header>
+
+  <!-- Main centered content -->
+  <main class="main">
+    <div class="form-box">
+      <h1>Student Fee Payment</h1>
+
+      <form id="paymentForm">
+        <label for="institute">Institute :</label>
+        <select id="institute" name="institute" required>
+          <option value="">-- Select Institute --</option>
+          <option value="Institute of Technology">Institute of Technology</option>
+        </select>
+
+        <label for="rollno">Student Roll No / Application No :</label>
+        <input id="rollno" name="rollno" type="text" placeholder="Enter Roll No" required>
+
+        <button type="submit" class="submit-btn">Submit</button>
+        <div id="error" class="error"></div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Razorpay checkout (kept in case you have backend endpoints) -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    async function getPublicKey() {
+      try {
+        const res = await fetch('/config');
+        const data = await res.json();
+        return data.key || '';
+      } catch (e) { return ''; }
+    }
+
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      document.getElementById('error').textContent = '';
+
+      const institute = document.getElementById('institute').value;
+      const rollno = document.getElementById('rollno').value.trim();
+
+      // create order (server validates the single allowed combo)
+      const createRes = await fetch('/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ institute, rollno })
+      });
+
+      if (!createRes.ok) {
+        const err = await createRes.json().catch(()=>({ error: 'Invalid details' }));
+        document.getElementById('error').textContent = err.error || 'Invalid institute or roll number';
+        return;
+      }
+
+      const order = await createRes.json(); // { orderId, amount }
+      const key = await getPublicKey();
+
+      const options = {
+        key: key,
+        order_id: order.orderId,
+        currency: 'INR',
+        name: 'Nirma University',
+        description: 'Fee Payment',
+        handler: async function (response) {
+          // verify payment on server
+          await fetch('/verify-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(response)
+          }).then(r => {
+            if (r.ok) alert('✅ Payment successful & verified');
+            else alert('⚠️ Payment made but verification failed');
+          }).catch(()=> alert('⚠️ Verification request failed'));
+        },
+        theme: { color: '#F58220' }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    });
+  </script>
+</body>
+</html>
