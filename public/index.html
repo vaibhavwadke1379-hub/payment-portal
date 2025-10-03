@@ -5,14 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Student Payment Portal</title>
   <link rel="stylesheet" href="/style.css">
-</head>
+  
+  <style>
+    .policies {
+      padding: 20px 40px;
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      margin-top: 50px;
+      border-top: 1px solid #eee;
+    }
+    .policies section {
+      margin-bottom: 30px;
+    }
+    .policies h2 {
+      font-size: 1.2em;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+    }
+    .policies p {
+      line-height: 1.6;
+      font-size: 0.9em;
+    }
+  </style>
+  </head>
+
 <body>
-  <!-- Centered Nirma logo -->
   <header class="site-header">
     <img src="/images/nirma.png" alt="Nirma University" class="logo">
   </header>
 
-  <!-- Main centered content -->
   <main class="main">
     <div class="form-box">
       <h1>Student Fee Payment</h1>
@@ -33,7 +56,24 @@
     </div>
   </main>
 
-  <!-- Razorpay checkout (kept in case you have backend endpoints) -->
+  <div class="policies">
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>For any queries regarding the payment process, please contact us.</p>
+      <p><strong>Email:</strong> [Enter Your Support Email Address Here]</p>
+      <p><strong>Address:</strong> Nirma University, Sarkhej-Gandhinagar Highway, Ahmedabad, Gujarat 382481</p>
+    </section>
+
+    <section id="terms">
+      <h2>Terms and Conditions</h2>
+      <p>By using this payment portal, you agree to the following terms. This service is provided to facilitate the payment of academic fees to Nirma University. Users are responsible for entering the correct student details. All payments are processed through our registered payment gateway partner, who is responsible for the security of your transaction data. The university is not responsible for any failed transactions due to network issues or incorrect information provided by the user.</p>
+    </section>
+
+    <section id="refund">
+      <h2>Refund and Cancellation Policy</h2>
+      <p>Fee payments made through this portal are generally non-refundable. Any refunds or cancellations are subject to the refund and cancellation policies of Nirma University. In case of a payment failure where your account was debited but the transaction was not successful, the amount will be automatically refunded to your account by the payment gateway within 5-7 working days.</p>
+    </section>
+  </div>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     async function getPublicKey() {
