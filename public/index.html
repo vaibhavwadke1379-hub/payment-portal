@@ -7,6 +7,12 @@
   <link rel="stylesheet" href="/style.css">
   
   <style>
+    /* START: Added rule to hide the 'About Us' section by default */
+    #about {
+      display: none;
+    }
+    /* END: Added rule */
+
     .policies {
       padding: 20px 40px;
       font-family: Arial, sans-serif;
@@ -29,7 +35,7 @@
       font-size: 0.9em;
     }
   </style>
-  </head>
+</head>
 
 <body>
   <header class="site-header">
@@ -57,10 +63,15 @@
   </main>
 
   <div class="policies">
+    <section id="about">
+      <h2>About Us</h2>
+      <p>This is an independent project by a student of Nirma University to provide a convenient online portal for fee payments. This website is not the official university portal.</p>
+    </section>
+
     <section id="contact">
       <h2>Contact Us</h2>
       <p>For any queries regarding the payment process, please contact us.</p>
-      <p><strong>Email:</strong> nirmaniversity0111@gmail.com</p>
+      <p><strong>Email:</strong> [Enter Your Support Email Address Here]</p>
       <p><strong>Address:</strong> Nirma University, Sarkhej-Gandhinagar Highway, Ahmedabad, Gujarat 382481</p>
     </section>
 
@@ -74,8 +85,11 @@
       <p>Fee payments made through this portal are generally non-refundable. Any refunds or cancellations are subject to the refund and cancellation policies of Nirma University. In case of a payment failure where your account was debited but the transaction was not successful, the amount will be automatically refunded to your account by the payment gateway within 5-7 working days.</p>
     </section>
   </div>
+
+
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
+    // The rest of your JavaScript code remains the same...
     async function getPublicKey() {
       try {
         const res = await fetch('/config');
@@ -91,7 +105,6 @@
       const institute = document.getElementById('institute').value;
       const rollno = document.getElementById('rollno').value.trim();
 
-      // create order (server validates the single allowed combo)
       const createRes = await fetch('/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -104,7 +117,7 @@
         return;
       }
 
-      const order = await createRes.json(); // { orderId, amount }
+      const order = await createRes.json();
       const key = await getPublicKey();
 
       const options = {
@@ -114,7 +127,6 @@
         name: 'Nirma University',
         description: 'Fee Payment',
         handler: async function (response) {
-          // verify payment on server
           await fetch('/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -131,5 +143,15 @@
       rzp.open();
     });
   </script>
-</body>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('source') === 'compliance') {
+      const aboutSection = document.getElementById('about');
+      if (aboutSection) {
+        aboutSection.style.display = 'block';
+      }
+    }
+  </script>
+  </body>
 </html>
