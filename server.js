@@ -74,4 +74,33 @@ app.post('/verify-payment', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+// =================================================================
+// START: FREE CRON JOB ENDPOINT
+// =================================================================
+
+// We create a secret URL path that only we know.
+// UptimeRobot will visit this URL to trigger our code.
+const CRON_JOB_SECRET_PATH = '/trigger-cron-j4k8s9p2q1';
+
+app.get(CRON_JOB_SECRET_PATH, (req, res) => {
+  // This message will appear in your Render logs every time the task runs.
+  console.log(`Cron job triggered at: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+
+  // --- ----------------------------------------------- ---
+  // --- PUT THE CODE YOU WANT TO RUN ON A SCHEDULE HERE ---
+  //
+  //  For example:
+  //  - Sending a daily report email
+  //  - Cleaning up old data
+  //  - Calling another API
+  //
+  // --- ----------------------------------------------- ---
+
+  // Send a success response so UptimeRobot knows the site is "Up".
+  res.status(200).send('Scheduled task executed successfully.');
+});
+
+// =================================================================
+// END: FREE CRON JOB ENDPOINT
+// =================================================================
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
