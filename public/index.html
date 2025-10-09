@@ -7,9 +7,7 @@
   <link rel="stylesheet" href="/style.css">
   
   <style>
-    /* 'About Us' is hidden by default, 'Services' is visible by default */
-    #about { display: none; } 
-
+    #about { display: none; }
     .policies { padding: 20px 40px; font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; margin-top: 50px; border-top: 1px solid #eee; }
     .policies section { margin-bottom: 30px; }
     .policies h2 { font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; }
@@ -55,17 +53,27 @@
     <section id="contact">
       <h2>Contact Us</h2>
       <p>For inquiries about my web development services, please contact:</p>
-      <p><strong>Email:</strong>nirmaniversity0111@gmail.com</p>
+      <p><strong>Email:</strong> nirmaniversity0111@gmail.com</p>
     </section>
 
     <section id="terms">
       <h2>Terms and Conditions</h2>
-      <p>By using this payment portal, you agree to the following terms. This service is provided to facilitate the payment of academic fees. Users are responsible for entering the correct student details...</p>
+      <p><strong>Last updated: October 9, 2025</strong></p>
+      <p>Please read these terms and conditions carefully. By using this website, you agree to be bound by the terms described herein. This service is an independent project designed to facilitate the payment of academic fees. Users are solely responsible for entering the correct student details (Institute, Roll Number). We are not liable for any issues arising from incorrect information provided by the user. All financial transactions are processed directly through our payment gateway partner, Razorpay, and we do not store any sensitive financial information like credit card or bank account numbers on our servers. The use of this service is at the user's own risk.</p>
+    </section>
+
+    <section id="privacy">
+      <h2>Privacy Policy</h2>
+      <p><strong>Last updated: October 9, 2025</strong></p>
+      <p>Your privacy is important to us. This policy explains what information we collect and how we use it.</p>
+      <p><strong>Information We Collect:</strong> We collect non-personally identifiable information such as institute name and student roll number, which you voluntarily provide to initiate a transaction.</p>
+      <p><strong>How We Use Information:</strong> This information is used solely for the purpose of generating a payment order with our payment gateway partner, Razorpay. We do not use this information for marketing or any other purpose.</p>
+      <p><strong>Data Security and Storage:</strong> We do not store any personal or financial data on our servers. All sensitive data, including card numbers, bank details, and personal information required for payment, is entered directly on the secure, PCI-DSS compliant pages of Razorpay. We are not responsible for the data collection and practices of our payment partners.</p>
     </section>
 
     <section id="refund">
       <h2>Refund and Cancellation Policy</h2>
-      <p>Fee payments made through this portal are generally non-refundable. Any refunds or cancellations are subject to the policies of the designated institution...</p>
+      <p>Fee payments made through this portal are generally non-refundable. Any refunds or cancellations are subject to the policies of the designated educational institution. In the event of a payment failure where your account was debited but the transaction was not successful, the amount will be automatically refunded to your account by the payment gateway (Razorpay) within 5-7 business days.</p>
     </section>
   </div>
 
@@ -73,28 +81,18 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     // Your Razorpay JavaScript code...
-    async function getPublicKey() { /*...*/ }
-    document.getElementById('paymentForm').addEventListener('submit', async (e) => { /*...*/ });
+    async function getPublicKey() { /* Your existing function */ }
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => { /* Your existing function */ });
   </script>
-  
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // Logic for the compliance link (SHOWS 'About Us')
     if (urlParams.get('source') === 'compliance') {
-      const aboutSection = document.getElementById('about');
-      if (aboutSection) {
-        aboutSection.style.display = 'block';
-      }
+      document.getElementById('about').style.display = 'block';
     }
-    
-    // Logic for the student/father link (HIDES 'Services')
     if (urlParams.get('view') === 'student') {
       const servicesSection = document.getElementById('services');
-      if (servicesSection) {
-        servicesSection.style.display = 'none';
-      }
+      if (servicesSection) { servicesSection.style.display = 'none'; }
     }
   </script>
-  </body>
+</body>
 </html>
