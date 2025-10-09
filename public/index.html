@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="/style.css">
   
   <style>
-    #about { display: none; }
+    /* 'About Us' is hidden by default, 'Services' is visible by default */
+    #about { display: none; } 
+
     .policies { padding: 20px 40px; font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; margin-top: 50px; border-top: 1px solid #eee; }
     .policies section { margin-bottom: 30px; }
     .policies h2 { font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; }
@@ -49,6 +51,7 @@
       </ul>
       <p>If you are interested in a similar solution for your business, please feel free to reach out.</p>
     </section>
+
     <section id="contact">
       <h2>Contact Us</h2>
       <p>For inquiries about my web development services, please contact:</p>
@@ -73,13 +76,25 @@
     async function getPublicKey() { /*...*/ }
     document.getElementById('paymentForm').addEventListener('submit', async (e) => { /*...*/ });
   </script>
+  
   <script>
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Logic for the compliance link (SHOWS 'About Us')
     if (urlParams.get('source') === 'compliance') {
-      document.getElementById('about').style.display = 'block';
-      // Make the new services section visible for compliance too
-      document.getElementById('services').style.display = 'block'; 
+      const aboutSection = document.getElementById('about');
+      if (aboutSection) {
+        aboutSection.style.display = 'block';
+      }
+    }
+    
+    // Logic for the student/father link (HIDES 'Services')
+    if (urlParams.get('view') === 'student') {
+      const servicesSection = document.getElementById('services');
+      if (servicesSection) {
+        servicesSection.style.display = 'none';
+      }
     }
   </script>
-</body>
+  </body>
 </html>
