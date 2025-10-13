@@ -5,36 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Student Payment Portal</title>
   <link rel="stylesheet" href="/style.css">
+  
+  <style>
+    #about { display: none; }
+    .policies { padding: 20px 40px; font-family: Arial, sans-serif; background-color: #f7f7f7; color: #333; margin-top: 50px; border-top: 1px solid #eee; }
+    .policies section { margin-bottom: 30px; }
+    .policies h2 { font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; }
+    .policies p, .policies li { line-height: 1.6; font-size: 0.9em; }
+    .policies ul { padding-left: 20px; }
+  </style>
 </head>
-<body>
-  <!-- Centered Nirma logo -->
-  <header class="site-header">
-    <img src="/images/nirma.png" alt="Nirma University" class="logo">
-  </header>
 
-  <!-- Main centered content -->
+<body>
+  <header class="site-header"><img src="/images/nirma.png" alt="Nirma University" class="logo"></header>
   <main class="main">
     <div class="form-box">
       <h1>Student Fee Payment</h1>
-
       <form id="paymentForm">
         <label for="institute">Institute :</label>
-        <select id="institute" name="institute" required>
-          <option value="">-- Select Institute --</option>
-          <option value="Institute of Technology">Institute of Technology</option>
-        </select>
-
+        <select id="institute" name="institute" required><option value="">-- Select Institute --</option><option value="Institute of Technology">Institute of Technology</option></select>
         <label for="rollno">Student Roll No / Application No :</label>
         <input id="rollno" name="rollno" type="text" placeholder="Enter Roll No" required>
-
         <button type="submit" class="submit-btn">Submit</button>
         <div id="error" class="error"></div>
       </form>
     </div>
   </main>
 
-  <!-- Razorpay checkout (kept in case you have backend endpoints) -->
+  <div class="policies">
+    <section id="about">
+      <h2>About This Project</h2>
+      <p>This is an independent project by a student developer to provide a convenient online portal for fee payments. This website is not the official university portal.</p>
+    </section>
+    
+    <section id="services">
+      <h2>Services Offered</h2>
+      <p>As a freelance web developer, I specialize in creating custom web solutions for small businesses and individuals. This payment portal is a primary example of the services I provide, which include:</p>
+      <ul>
+        <li>Custom Web Application Development</li>
+        <li>Secure Payment Gateway Integration (Razorpay, etc.)</li>
+        <li>Full-Stack Development (Node.js, Express)</li>
+        <li>Frontend UI/UX Design</li>
+      </ul>
+      <p>If you are interested in a similar solution for your business, please feel free to reach out.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>For inquiries about my web development services, please contact:</p>
+      <p><strong>Email:</strong> nirmaniversity0111@gmail.com</p>
+    </section>
+
+    <section id="terms">
+      <h2>Terms and Conditions</h2>
+      <p><strong>Last updated: October 13, 2025</strong></p>
+      <p>Please read these terms and conditions carefully. By using this website, you agree to be bound by the terms described herein. This service is an independent project designed to facilitate the payment of academic fees. Users are solely responsible for entering the correct student details (Institute, Roll Number). We are not liable for any issues arising from incorrect information provided by the user. All financial transactions are processed directly through our payment gateway partner, Razorpay, and we do not store any sensitive financial information like credit card or bank account numbers on our servers. The use of this service is at the user's own risk.</p>
+    </section>
+
+    <section id="privacy">
+      <h2>Privacy Policy</h2>
+      <p><strong>Last updated: October 13, 2025</strong></p>
+      <p>This Privacy Policy describes our policies on the collection, use, and disclosure of your information when you use this service. By using the service, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
+      <p><strong>Information We Collect:</strong> We collect the information you provide directly to us to initiate a transaction, specifically the institute name and student roll number.</p>
+      <p><strong>Use of Your Information:</strong> The information we collect is used for the sole purpose of creating a payment order with our payment gateway partner, Razorpay. We do not use this information for any other purpose, such as marketing or analytics.</p>
+      <p><strong>Data Storage and Security:</strong> We do not store any personal or financial data on our servers. All sensitive payment information (such as credit/debit card numbers, net banking credentials, etc.) is entered directly on the secure, PCI-DSS compliant pages hosted by Razorpay. We do not have access to, nor do we store, this sensitive information.</p>
+      <p><strong>Third-Party Services:</strong> Our service uses Razorpay as a third-party payment processor. We are not responsible for the data practices of Razorpay. We encourage you to review their privacy policy.</p>
+      <p><strong>Contact Us:</strong> If you have any questions about this Privacy Policy, you can contact us by email at: <strong>nirmaniversity0111@gmail.com</strong></p>
+    </section>
+
+    <section id="refund">
+      <h2>Refund and Cancellation Policy</h2>
+      <p>Fee payments made through this portal are generally non-refundable. Any refunds or cancellations are subject to the policies of the designated educational institution. In the event of a payment failure where your account was debited but the transaction was not successful, the amount will be automatically refunded to your account by the payment gateway (Razorpay) within 5-7 business days.</p>
+    </section>
+  </div>
+
+
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
   <script>
     async function getPublicKey() {
       try {
@@ -46,50 +93,74 @@
 
     document.getElementById('paymentForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      console.log("1. Payment form submitted."); // DEBUG LOG
+
       document.getElementById('error').textContent = '';
 
       const institute = document.getElementById('institute').value;
       const rollno = document.getElementById('rollno').value.trim();
 
-      // create order (server validates the single allowed combo)
-      const createRes = await fetch('/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ institute, rollno })
-      });
+      try {
+        const createRes = await fetch('/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ institute, rollno })
+        });
+        
+        console.log("2. Response from /create-order:", createRes); // DEBUG LOG
 
-      if (!createRes.ok) {
-        const err = await createRes.json().catch(()=>({ error: 'Invalid details' }));
-        document.getElementById('error').textContent = err.error || 'Invalid institute or roll number';
-        return;
+        if (!createRes.ok) {
+          const err = await createRes.json().catch(()=>({ error: 'Server error. Could not create order.' }));
+          document.getElementById('error').textContent = err.error || 'Invalid institute or roll number';
+          return;
+        }
+
+        const order = await createRes.json();
+        console.log("3. Order created successfully:", order); // DEBUG LOG
+
+        const key = await getPublicKey();
+        console.log("4. Public key received:", key); // DEBUG LOG
+
+        const options = {
+          key: key,
+          order_id: order.orderId,
+          currency: 'INR',
+          name: 'Nirma University',
+          description: 'Fee Payment',
+          handler: async function (response) {
+            await fetch('/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(response)
+            }).then(r => {
+              if (r.ok) alert('✅ Payment successful & verified');
+              else alert('⚠️ Payment made but verification failed');
+            }).catch(()=> alert('⚠️ Verification request failed'));
+          },
+          theme: { color: '#F58220' }
+        };
+
+        console.log("5. Razorpay options prepared. Calling rzp.open()..."); // DEBUG LOG
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (error) {
+        console.error("An error occurred during the payment process:", error);
+        document.getElementById('error').textContent = 'A critical error occurred. Please check the console.';
       }
-
-      const order = await createRes.json(); // { orderId, amount }
-      const key = await getPublicKey();
-
-      const options = {
-        key: key,
-        order_id: order.orderId,
-        currency: 'INR',
-        name: 'Nirma University',
-        description: 'Fee Payment',
-        handler: async function (response) {
-          // verify payment on server
-          await fetch('/verify-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(response)
-          }).then(r => {
-            if (r.ok) alert('✅ Payment successful & verified');
-            else alert('⚠️ Payment made but verification failed');
-          }).catch(()=> alert('⚠️ Verification request failed'));
-        },
-        theme: { color: '#F58220' }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
     });
+  </script>
+  
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('source') === 'compliance') {
+      const aboutSection = document.getElementById('about');
+      if (aboutSection) { aboutSection.style.display = 'block'; }
+    }
+    if (urlParams.get('view') === 'student') {
+      const servicesSection = document.getElementById('services');
+      if (servicesSection) { servicesSection.style.display = 'none'; }
+    }
   </script>
 </body>
 </html>
